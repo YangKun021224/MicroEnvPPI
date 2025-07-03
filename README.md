@@ -17,15 +17,15 @@ This repository contains the official PyTorch implementation for our paper:
 
 Protein-protein interactions (PPIs) are fundamental to almost all cellular processes. To address the limitations of existing computational models in characterizing residue microenvironments, we propose MicroEnvPPI, a novel PPI prediction framework that focuses on optimizing microenvironment representation. This work significantly improves prediction accuracy and generalization capability on challenging datasets by integrating powerful ESM-2 language model embeddings and innovative multi-task self-supervised pretraining strategies (including graph contrastive learning).
 
-## 框架概览
+## Framework Overview
 
-MicroEnvPPI 通过一个两阶段框架优化残基微环境表示，以实现高精度的PPI预测。
+MicroEnvPPI optimizes residue microenvironment representation through a two-stage framework to achieve high-precision PPI prediction.
 
 ![MicroEnvPPI Framework](MicroEnvPPI/assets/framework.png)
 
 *Figure 1: Overview of the MicroEnvPPI framework, detailing pretraining with auxiliary tasks and downstream PPI modeling.*
 
-## Framework Overview
+## File Structure
 
 ```
 MicroEnvPPI/
@@ -72,7 +72,6 @@ conda activate MicroEnvPPI
     -   After downloading, please extract and place the obtained processed_data folder in the data/ folder under the project root directory.
 
 -   **Required: Download pre-trained models**
-    -   我们所有的实验结果和模型检查点都已上传。
     -   Download link:  [results (Google Drive)](https://drive.google.com/file/d/1lR8WeZTQMwOSnUFiruShmYzyPBiNJFmg/view?usp=drive_link)
     -   After downloading, please extract and place the obtained results folder in the project root directory.
 
