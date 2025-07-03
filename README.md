@@ -28,23 +28,23 @@ MicroEnvPPI 通过一个两阶段框架优化残基微环境表示，以实现�
 
 ```
 MicroEnvPPI/
-├── assets/                 # (可选) 用于存放README中的图片等静态资源
-├── configs/                # 存放所有实验的超参数配置文件
+├── assets/        
+├── configs/             
 │   └── param_configs.json
 ├── data/
-│   └── processed_data/     # 脚本处理后，可供模型直接使用的数据
-├── raw_data/               # 存放从数据库下载的原始数据 (PDB, fasta等)
+│   └── processed_data/     
+├── raw_data/               
 │   └── STRING_AF2DB/
-├── results/                # 存放所有实验的输出，包括日志、模型检查点和预测结果
-├── src/                    # 项目所有核心源代码
-│   ├── data_process.py     # 预处理原始数据，生成图结构文件
-│   ├── dataloader.py       # DGL数据加载器，用于构建图数据批次
-│   ├── generate_esm_embeddings.py # 从蛋白质序列生成ESM-2嵌入特征
-│   ├── models.py           # 定义所有模型架构 (HGNN, CodeBook, GIN等)
-│   ├── train.py            # 主训练脚本，包含预训练和下游任务训练逻辑
-│   └── utils.py            # 包含工具函数，如随机种子设置、评估指标计算等
-├── environment.yml         # Conda环境配置文件，用于复现依赖
-└── README.md               # 本说明文档
+├── results/                
+├── src/                   
+│   ├── data_process.py   
+│   ├── dataloader.py       
+│   ├── generate_esm_embeddings.py 
+│   ├── models.py          
+│   ├── train.py           
+│   └── utils.py            
+├── environment.yml        
+└── README.md               
 ```
 
 ## 快速开始：使用预训练模型进行评估
@@ -121,7 +121,7 @@ python train.py --dataset SHS27k --split_mode dfs --ckpt_path "../results/SHS27k
     -   运行 `src/data_process.py` 来处理PDB文件，并生成图的边文件。
     ```bash
     # 仍在 src 目录下
-    python data_process.py --dataset <your_dataset_name>
+    python data_process.py --dataset <dataset_name：SHS27k,SHS148k,STRING>
     ```
 
 ### 3. 运行训练
@@ -132,7 +132,7 @@ python train.py --dataset SHS27k --split_mode dfs --ckpt_path "../results/SHS27k
     # 仍在 src 目录下
     python train.py --dataset SHS148k --split_mode bfs --seed 42
     ```
-    -   训练完成后，最优的VAE模型 (`vae_model.ckpt`) 和 GIN模型 (`model_..._best_state.pth`) 将保存在 `results/` 目录下。
+    -   训练完成后，最优的VAE模型 vae_model.ckpt 和 GIN模型model_..._best_state.pth将保存在 results/ 目录下。
 
 -   **断点续训**:
     -   如果训练意外中断，您可以使用 `--resume` 参数从检查点恢复。
