@@ -35,7 +35,7 @@ MicroEnvPPI框架包括两个主要阶段：(a)一个全面的预训练阶段，
 #### 1. 克隆代码库
 
 ```bash
-git clone [https://github.com/your-username/MicroEnvPPI.git](https://github.com/your-username/MicroEnvPPI.git)
+git clone https://github.com/YangKun021224/MicroEnvPPI.git
 cd MicroEnvPPI
 ```
 
@@ -48,8 +48,6 @@ cd MicroEnvPPI
 conda env create -f environment.yml
 conda activate MicroEnvPPI
 ```
-
-*（注意：如果 `environment.yml` 文件缺失，您可以根据 `import` 语句手动创建一个，关键依赖包括 `python=3.8`, `pytorch`, `dgl`, `transformers`, `scikit-learn` 等。）*
 
 ## 数据准备
 
