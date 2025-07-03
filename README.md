@@ -13,22 +13,49 @@ This repository contains the official PyTorch implementation for our paper:
 >
 > ([Link to Paper - TBD]())
 
+## 摘要
+
+蛋白质-蛋白质相互作用（PPIs）是几乎所有细胞过程的基础。为解决现有计算模型在残基微环境表征上的局限性，我们提出了 **MicroEnvPPI**，一个以优化微环境表示为核心的新颖PPI预测框架。本工作通过整合强大的 **ESM-2** 语言模型嵌入和创新的多任务自监督预训练策略（包含**图对比学习**），显著提升了模型在挑战性数据集上的预测精度和泛化能力。
+
 ## 框架概览
 
-MicroEnvPPI 通过一个两阶段框架优化残基微环境表示，以实现高精度的PPI预测。核心思想是结合强大的ESM-2语言模型嵌入和创新的多任务自监督预训练策略（包含图对比学习）。
+MicroEnvPPI 通过一个两阶段框架优化残基微环境表示，以实现高精度的PPI预测。
 
-![MicroEnvPPI Framework](MicroEnvPPI/assets/framework.png)
+![MicroEnvPPI Framework](https://i.imgur.com/8xYtE9M.png)
 *图1: MicroEnvPPI框架概览，详细说明了带有辅助任务的预训练和下游PPI建模。*
+
+## 文件结构
+
+```
+MicroEnvPPI/
+├── assets/                 # (可选) 用于存放README中的图片等静态资源
+├── configs/                # 存放所有实验的超参数配置文件
+│   └── param_configs.json
+├── data/
+│   └── processed_data/     # 脚本处理后，可供模型直接使用的数据
+├── raw_data/               # 存放从数据库下载的原始数据 (PDB, fasta等)
+│   └── STRING_AF2DB/
+├── results/                # 存放所有实验的输出，包括日志、模型检查点和预测结果
+├── src/                    # 项目所有核心源代码
+│   ├── data_process.py     # 预处理原始数据，生成图结构文件
+│   ├── dataloader.py       # DGL数据加载器，用于构建图数据批次
+│   ├── generate_esm_embeddings.py # 从蛋白质序列生成ESM-2嵌入特征
+│   ├── models.py           # 定义所有模型架构 (HGNN, CodeBook, GIN等)
+│   ├── train.py            # 主训练脚本，包含预训练和下游任务训练逻辑
+│   └── utils.py            # 包含工具函数，如随机种子设置、评估指标计算等
+├── environment.yml         # Conda环境配置文件，用于复现依赖
+└── README.md               # 本说明文档
+```
 
 ## 快速开始：使用预训练模型进行评估
 
-我们提供了在 **SHS27k** 数据集上针对三种不同划分方式`random`, `bfs`, `dfs`训练好的模型。您可以按照以下步骤快速复现评估结果。
+我们提供了在 **SHS27k** 数据集上针对三种不同划分方式（`random`, `bfs`, `dfs`）训练好的模型。您可以按照以下步骤快速复现评估结果。
 
 #### 1. 准备环境和代码
 
 ```bash
 # 克隆本仓库
-git clone [https://github.com/yangkun021224/MicroEnvPPI.git](https://github.com/yangkun021224/MicroEnvPPI.git)
+git clone [https://github.com/YangKun021224/MicroEnvPPI.git](https://github.com/YangKun021224/MicroEnvPPI.git)
 cd MicroEnvPPI
 
 # 使用Conda创建并激活环境
@@ -94,7 +121,7 @@ python train.py --dataset SHS27k --split_mode dfs --ckpt_path "../results/SHS27k
     -   运行 `src/data_process.py` 来处理PDB文件，并生成图的边文件。
     ```bash
     # 仍在 src 目录下
-    python src/data_process.py --dataset <your_dataset_name>
+    python data_process.py --dataset <your_dataset_name>
     ```
 
 ### 3. 运行训练
@@ -132,5 +159,5 @@ python train.py --dataset SHS27k --split_mode dfs --ckpt_path "../results/SHS27k
 如果您有任何问题或建议，欢迎通过GitHub Issue与我们交流，或直接联系通讯作者：
 - **Linlin Zhuo**: 20210339@wzut.edu.cn
 - **Dongsheng Cao**: oriental-cds@163.com
-- **Xiangzheng Fu**: fxzheng@hkbu.edu.hk
+- **Xiangzheng Fu**: fxzheng@hkbu.edu.cn
 ```
