@@ -27,7 +27,7 @@ This repository contains the official PyTorch implementation for our paper:
 
 MicroEnvPPI框架包括两个主要阶段：(a)一个全面的预训练阶段，用于学习优化的微环境表示；(b)一个下游任务建模阶段，用于最终的PPI预测。
 
-![MicroEnvPPI Framework](https://i.imgur.com/8xYtE9M.png)
+![MicroEnvPPI Framework](./assets/framework.png)
 *图1: MicroEnvPPI框架概览，详细说明了带有辅助任务的预训练和下游PPI建模。*
 
 ## 安装
