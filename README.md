@@ -22,6 +22,7 @@ This repository contains the official PyTorch implementation for our paper:
 MicroEnvPPI 通过一个两阶段框架优化残基微环境表示，以实现高精度的PPI预测。
 
 ![MicroEnvPPI Framework](MicroEnvPPI/assets/framework.png)
+
 *图1: MicroEnvPPI框架概览，详细说明了带有辅助任务的预训练和下游PPI建模。*
 
 ## 文件结构
@@ -92,7 +93,7 @@ python train.py --dataset SHS27k --split_mode bfs --ckpt_path "../results/SHS27k
 # 在 SHS27k (dfs split) 上评估
 python train.py --dataset SHS27k --split_mode dfs --ckpt_path "../results/SHS27k/2025-04-29_18-34-09_183/VAE_CL_Aux_RandMCM/vae_model.ckpt"
 ```
-*注意：`--ckpt_path` 使用了相对路径 `../results/...`，这是因为我们是在 `src` 目录下执行命令。*
+
 
 ---
 
