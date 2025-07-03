@@ -17,7 +17,7 @@ This repository contains the official PyTorch implementation for our paper:
 
 MicroEnvPPI 通过一个两阶段框架优化残基微环境表示，以实现高精度的PPI预测。核心思想是结合强大的ESM-2语言模型嵌入和创新的多任务自监督预训练策略（包含图对比学习）。
 
-![MicroEnvPPI Framework](https://i.imgur.com/8xYtE9M.png)
+![MicroEnvPPI Framework](MicroEnvPPI/assets/framework.png)
 *图1: MicroEnvPPI框架概览，详细说明了带有辅助任务的预训练和下游PPI建模。*
 
 ## 快速开始：使用预训练模型进行评估
@@ -28,7 +28,7 @@ MicroEnvPPI 通过一个两阶段框架优化残基微环境表示，以实现�
 
 ```bash
 # 克隆本仓库
-git clone [https://github.com/YangKun021224/MicroEnvPPI.git](https://github.com/YangKun021224/MicroEnvPPI.git)
+git clone [https://github.com/yangkun021224/MicroEnvPPI.git](https://github.com/yangkun021224/MicroEnvPPI.git)
 cd MicroEnvPPI
 
 # 使用Conda创建并激活环境
