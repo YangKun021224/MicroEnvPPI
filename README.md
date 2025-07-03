@@ -21,7 +21,7 @@ This repository contains the official PyTorch implementation for our paper:
 
 MicroEnvPPI 通过一个两阶段框架优化残基微环境表示，以实现高精度的PPI预测。
 
-![MicroEnvPPI Framework](https://i.imgur.com/8xYtE9M.png)
+![MicroEnvPPI Framework](MicroEnvPPI/assets/framework.png)
 *图1: MicroEnvPPI框架概览，详细说明了带有辅助任务的预训练和下游PPI建模。*
 
 ## 文件结构
