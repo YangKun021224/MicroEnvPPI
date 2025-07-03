@@ -13,120 +13,106 @@ This repository contains the official PyTorch implementation for our paper:
 >
 > ([Link to Paper - TBD]())
 
-## 摘要
-
-蛋白质-蛋白质相互作用（PPIs）是几乎所有细胞过程的基础。尽管现有计算模型已取得显著进展，但它们往往忽视了残基水平微环境的关键重要性，从而限制了其预测能力和泛化性。
-
-为解决这一问题，我们提出了 **MicroEnvPPI**，这是一个新颖的、以优化残基微环境表示为核心的PPI预测框架。我们的主要贡献和创新点包括：
-
-1.  **更强大的特征表示**: 我们使用强大的蛋白质语言模型 **ESM-2** 的高维上下文感知嵌入，取代了传统的理化特征，极大地丰富了残基表示的语义和进化信息 。
-2.  **先进的多任务预训练框架**: 我们设计了一种创新的多任务预训练策略，该策略将基于VQ-VAE的字典学习与两个关键的辅助任务相结合：**图对比学习**和**掩码特征重构** 。这种协同作用显著提升了所学微环境表示的质量和鲁棒性。
-3.  **卓越的泛化能力**: 通过联合优化全局PPI推断和局部微环境表示，MicroEnvPPI 表现出卓越的性能和稳定性，尤其是在包含未见蛋白质的挑战性数据集划分（如DFS和BFS）上。
-
 ## 框架概览
 
-MicroEnvPPI框架包括两个主要阶段：(a)一个全面的预训练阶段，用于学习优化的微环境表示；(b)一个下游任务建模阶段，用于最终的PPI预测。
+MicroEnvPPI 通过一个两阶段框架优化残基微环境表示，以实现高精度的PPI预测。核心思想是结合强大的ESM-2语言模型嵌入和创新的多任务自监督预训练策略（包含图对比学习）。
 
-![MicroEnvPPI Framework](MicroEnvPPI/assets/framework.png)
-
+![MicroEnvPPI Framework](https://i.imgur.com/8xYtE9M.png)
 *图1: MicroEnvPPI框架概览，详细说明了带有辅助任务的预训练和下游PPI建模。*
 
-## 安装
+## 快速开始：使用预训练模型进行评估
 
-#### 1. 克隆代码库
+我们提供了在 **SHS27k** 数据集上针对三种不同划分方式（`random`, `bfs`, `dfs`）训练好的模型。您可以按照以下步骤快速复现评估结果。
+
+#### 1. 准备环境和代码
 
 ```bash
-git clone https://github.com/YangKun021224/MicroEnvPPI.git
+# 克隆本仓库
+git clone [https://github.com/YangKun021224/MicroEnvPPI.git](https://github.com/YangKun021224/MicroEnvPPI.git)
 cd MicroEnvPPI
-```
 
-#### 2. 创建并激活Conda环境
-
-我们强烈建议使用Conda来管理项目依赖。您可以从我们提供的 `environment.yml` 文件创建环境。
-
-```bash
-# 推荐使用conda进行环境管理
+# 使用Conda创建并激活环境
 conda env create -f environment.yml
 conda activate MicroEnvPPI
 ```
 
-## 数据准备
+#### 2. 下载数据和预训练模型
 
-数据处理流程涉及三个主要步骤，请按顺序执行：
+-   **必需：下载处理好的数据**
+    -   我们强烈建议您直接下载我们处理好的数据，以跳过繁琐的数据预处理步骤。
+    -   下载链接: [processed_data.zip (Google Drive)](https://drive.google.com/file/d/1mWrgzMxuHHIMsDA2OL8r0lNShiCUWc6Y/view?usp=drive_link)
+    -   下载后，请解压并将得到的 `processed_data` 文件夹放入项目根目录下的 `data/` 文件夹中。
 
-#### 步骤 1: 下载原始数据
+-   **必需：下载预训练模型**
+    -   我们所有的实验结果和模型检查点都已上传。
+    -   下载链接: [results (Google Drive)](https://drive.google.com/file/d/1lR8WeZTQMwOSnUFiruShmYzyPBiNJFmg/view?usp=drive_link)
+    -   下载后，请解压并将得到的 `results` 文件夹放置在项目**根目录**下。
 
--   从[STRING数据库](https://string-db.org/)下载原始的蛋白质序列（`protein.sequences.dictionary.tsv`）、PPI关系（`protein.actions.txt`）文件。
--   从[AlphaFold Protein Structure Database](https://alphafold.ebi.ac.uk/)下载对应物种的蛋白质结构PDB文件。
--   将下载的序列和关系文件放入项目根目录下的 `raw_data/` 文件夹。
--   在 `raw_data/` 内创建一个名为 `STRING_AF2DB/` 的子文件夹，并将所有PDB文件放入其中。
+#### 3. 运行评估命令
 
-#### 步骤 2: 生成ESM-2嵌入
-
--   [cite_start]我们的模型使用ESM-2（650M版本）的1280维残基嵌入作为初始节点特征 [cite: 70, 77, 1397, 1398]。
--   首先，请从Hugging Face Hub下载`esm2_t33_650M_UR50D`模型权重，或确保您的环境可以访问它。
--   运行`generate_esm_embeddings.py`脚本来为您的数据集生成特征文件。**请务必在使用前修改脚本内的`dataset`和`local_model_path`变量**。
+下载并放置好上述文件后，您可以直接运行以下命令来评估对应的预训练模型：
 
 ```bash
-# 进入src目录
+# 进入 src 目录
 cd src
 
-# 为SHS148k数据集生成嵌入（示例）
-python generate_esm_embeddings.py
+# 在 SHS27k (random split) 上评估
+python train.py --dataset SHS27k --split_mode random --ckpt_path "../results/SHS27k/2025-04-29_17-21-12_279/VAE_CL_Aux_RandMCM/vae_model.ckpt"
+
+# 在 SHS27k (bfs split) 上评估
+python train.py --dataset SHS27k --split_mode bfs --ckpt_path "../results/SHS27k/2025-04-30_01-13-55_572/VAE_CL_Aux_RandMCM/vae_model.ckpt"
+
+# 在 SHS27k (dfs split) 上评估
+python train.py --dataset SHS27k --split_mode dfs --ckpt_path "../results/SHS27k/2025-04-29_18-34-09_183/VAE_CL_Aux_RandMCM/vae_model.ckpt"
 ```
--   该脚本会生成一个如 `data/processed_data/protein.nodes.esm2_650M.SHS148k.pt` 的文件。
+*注意：`--ckpt_path` 使用了相对路径 `../results/...`，这是因为我们是在 `src` 目录下执行命令。*
 
-#### 步骤 3: 处理图结构数据
+---
 
--   在生成了ESM嵌入之后，运行`data_process.py`脚本来处理PDB文件，提取基于三维空间的边（半径邻居和k近邻）。
+## 从零开始训练
 
-```bash
-# 仍在src目录下
-python data_process.py --dataset SHS148k
-```
--   此脚本会生成`protein.rball.edges.SHS148k.npy`和`protein.knn.edges.SHS148k.npy`等文件，存放于`data/processed_data/`目录。
+如果您希望从原始数据开始，完整复现我们的数据处理和模型训练流程，请遵循以下步骤。
 
-## 如何运行模型
+### 1. 安装环境
+（同上文“快速开始”部分）
 
-`train.py`脚本是执行预训练和下游任务建模的统一入口。
+### 2. 数据准备
 
-### 1. 完整流程：预训练 + 下游任务
+-   **下载原始数据**:
+    -   下载链接: [raw_data.rar (Google Drive)](https://drive.google.com/file/d/1nq5UZIhkrMUsS_N4oVKs5l3fM82JsFZl/view?usp=drive_link)
+    -   下载后解压，并将所有内容放入项目根目录下的 `raw_data/` 文件夹中。确保其中包含PDB文件所在的 `STRING_AF2DB` 子文件夹。
 
-要从头开始运行包括预训练在内的完整流程，请使用以下命令。脚本将自动从`configs/param_configs.json`加载为不同数据集和划分方式优化的超参数。
+-   **生成ESM-2嵌入**:
+    -   运行 `src/generate_esm_embeddings.py` 为您的数据集生成初始特征。
+    -   **注意**: 运行前请务必修改脚本内的 `dataset` 和 `local_model_path` 变量。
+    ```bash
+    cd src
+    python generate_esm_embeddings.py
+    ```
 
-```bash
-# 仍在src目录下
-python train.py --dataset SHS148k --split_mode bfs --seed 42
-```
--   `--dataset`: 指定数据集 (`SHS27k`, `SHS148k`, `STRING`)。
--   [cite_start]`--split_mode`: 指定数据划分方式 (`random`, `bfs`, `dfs`) [cite: 252]。
--   `--seed`: 设置随机种子以保证结果可复现。
+-   **处理图结构数据**:
+    -   运行 `src/data_process.py` 来处理PDB文件，并生成图的边文件。
+    ```bash
+    # 仍在 src 目录下
+    python src/data_process.py --dataset <your_dataset_name>
+    ```
 
-预训练好的VAE模型 (`vae_model.ckpt`) 将保存在`results/`目录下的对应时间戳文件夹中。
+### 3. 运行训练
 
-### 2. 仅下游任务：使用已有的预训练模型进行评估
+-   **预训练 + 下游任务**:
+    -   要完整地运行整个训练流程（先进行VAE预训练，然后进行下游GIN模型训练），请执行：
+    ```bash
+    # 仍在 src 目录下
+    python train.py --dataset SHS148k --split_mode bfs --seed 42
+    ```
+    -   训练完成后，最优的VAE模型 (`vae_model.ckpt`) 和 GIN模型 (`model_..._best_state.pth`) 将保存在 `results/` 目录下。
 
-如果您已经有了一个预训练好的`vae_model.ckpt`，您可以通过`--ckpt_path`参数指定其路径，从而**跳过耗时的预训练阶段**，直接进行下游GIN模型的训练和评估。
-
-```bash
-# 仍在src目录下
-python train.py \
-    --dataset SHS148k \
-    --split_mode bfs \
-    --ckpt_path ../results/SHS148k/your_timestamp_folder/VAE_CL_Aux_RandMCM/vae_model.ckpt
-```
-
-### 3. 断点续训
-
-本脚本支持从检查点（checkpoint）恢复训练，无论是VAE预训练还是GIN下游任务训练。请使用`--resume`标志，并指向对应的检查点文件。
-
-```bash
-# 示例：恢复VAE预训练
-python train.py --dataset STRING --split_mode random --resume ../results/STRING/.../vae_cl_aux_randmcm_checkpoint.pth
-
-# 示例：恢复GIN下游任务训练
-python train.py --dataset STRING --split_mode random --resume ../results/STRING/.../gin_cl_aux_randmcm_checkpoint.pth
-```
+-   **断点续训**:
+    -   如果训练意外中断，您可以使用 `--resume` 参数从检查点恢复。
+    ```bash
+    # 示例：恢复GIN下游任务训练
+    python train.py --dataset STRING --split_mode random --resume ../results/STRING/.../gin_cl_aux_randmcm_checkpoint.pth
+    ```
 
 ## 引用
 
