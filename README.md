@@ -13,9 +13,9 @@ This repository contains the official PyTorch implementation for our paper:
 >
 > ([Link to Paper - TBD]())
 
-## 摘要
+## Abstract
 
-蛋白质-蛋白质相互作用（PPIs）是几乎所有细胞过程的基础。为解决现有计算模型在残基微环境表征上的局限性，我们提出了 **MicroEnvPPI**，一个以优化微环境表示为核心的新颖PPI预测框架。本工作通过整合强大的 **ESM-2** 语言模型嵌入和创新的多任务自监督预训练策略（包含**图对比学习**），显著提升了模型在挑战性数据集上的预测精度和泛化能力。
+Protein-protein interactions (PPIs) are fundamental to almost all cellular processes. To address the limitations of existing computational models in characterizing residue microenvironments, we propose MicroEnvPPI, a novel PPI prediction framework that focuses on optimizing microenvironment representation. This work significantly improves prediction accuracy and generalization capability on challenging datasets by integrating powerful ESM-2 language model embeddings and innovative multi-task self-supervised pretraining strategies (including graph contrastive learning).
 
 ## 框架概览
 
@@ -23,9 +23,9 @@ MicroEnvPPI 通过一个两阶段框架优化残基微环境表示，以实现�
 
 ![MicroEnvPPI Framework](MicroEnvPPI/assets/framework.png)
 
-*图1: MicroEnvPPI框架概览，详细说明了带有辅助任务的预训练和下游PPI建模。*
+*Figure 1: Overview of the MicroEnvPPI framework, detailing pretraining with auxiliary tasks and downstream PPI modeling.*
 
-## 文件结构
+## Framework Overview
 
 ```
 MicroEnvPPI/
@@ -48,103 +48,103 @@ MicroEnvPPI/
 └── README.md               
 ```
 
-## 快速开始：使用预训练模型进行评估
+## Quick Start: Evaluation with Pre-trained Models
 
-我们提供了在 **SHS27k** 数据集上针对三种不同划分方式random, bfs,dfs训练好的模型。您可以按照以下步骤快速复现评估结果。
+We provide pre-trained models on the SHS27k dataset for three different splitting methods: random, bfs, and dfs. You can follow the steps below to quickly reproduce evaluation results.
 
-#### 1. 准备环境和代码
+#### 1. Setup Environment and Code
 
 ```bash
-# 克隆本仓库
+# Clone this repository
 git clone [https://github.com/yangkun021224/MicroEnvPPI.git](https://github.com/yangkun021224/MicroEnvPPI.git)
 cd MicroEnvPPI
 
-# 使用Conda创建并激活环境
+# Create and activate environment using Conda
 conda env create -f environment.yml
 conda activate MicroEnvPPI
 ```
 
-#### 2. 下载数据和预训练模型
+#### 2. Download Data and Pre-trained Models
 
--   **必需：下载处理好的数据**
-    -   我们强烈建议您直接下载我们处理好的数据，以跳过繁琐的数据预处理步骤。
-    -   下载链接: [processed_data.zip (Google Drive)](https://drive.google.com/file/d/1mWrgzMxuHHIMsDA2OL8r0lNShiCUWc6Y/view?usp=drive_link)
-    -   下载后，请解压并将得到的 `processed_data` 文件夹放入项目根目录下的 `data/` 文件夹中。
+-   **Required: Download processed data**
+    -   We strongly recommend downloading our processed data directly to skip the tedious data preprocessing steps.
+    -   Download link: [processed_data.zip (Google Drive)](https://drive.google.com/file/d/1mWrgzMxuHHIMsDA2OL8r0lNShiCUWc6Y/view?usp=drive_link)
+    -   After downloading, please extract and place the obtained processed_data folder in the data/ folder under the project root directory.
 
--   **必需：下载预训练模型**
+-   **Required: Download pre-trained models**
     -   我们所有的实验结果和模型检查点都已上传。
-    -   下载链接: [results (Google Drive)](https://drive.google.com/file/d/1lR8WeZTQMwOSnUFiruShmYzyPBiNJFmg/view?usp=drive_link)
-    -   下载后，请解压并将得到的 `results` 文件夹放置在项目**根目录**下。
+    -   Download link:  [results (Google Drive)](https://drive.google.com/file/d/1lR8WeZTQMwOSnUFiruShmYzyPBiNJFmg/view?usp=drive_link)
+    -   After downloading, please extract and place the obtained results folder in the project root directory.
 
-#### 3. 运行评估命令
+#### 3. Run Evaluation Commands
 
-下载并放置好上述文件后，您可以直接运行以下命令来评估对应的预训练模型：
+After downloading and placing the above files, you can directly run the following commands to evaluate the corresponding pre-trained models:
 
 ```bash
-# 进入 src 目录
+
 cd src
 
-# 在 SHS27k (random split) 上评估
+# Evaluate on SHS27k (random split)
 python train.py --dataset SHS27k --split_mode random --ckpt_path "../results/SHS27k/2025-04-29_17-21-12_279/VAE_CL_Aux_RandMCM/vae_model.ckpt"
 
-# 在 SHS27k (bfs split) 上评估
+# Evaluate on SHS27k (bfs split)
 python train.py --dataset SHS27k --split_mode bfs --ckpt_path "../results/SHS27k/2025-04-30_01-13-55_572/VAE_CL_Aux_RandMCM/vae_model.ckpt"
 
-# 在 SHS27k (dfs split) 上评估
+# Evaluate on SHS27k (dfs split)
 python train.py --dataset SHS27k --split_mode dfs --ckpt_path "../results/SHS27k/2025-04-29_18-34-09_183/VAE_CL_Aux_RandMCM/vae_model.ckpt"
 ```
 
 
 ---
 
-## 从零开始训练
+## Training from Scratch
 
-如果您希望从原始数据开始，完整复现我们的数据处理和模型训练流程，请遵循以下步骤。
+If you wish to start from raw data and fully reproduce our data processing and model training pipeline, please follow these steps.
 
-### 1. 安装环境
+### 1. Environment Setup
 （同上文“快速开始”部分）
 
-### 2. 数据准备
+### 2. Data Preparation
 
--   **下载原始数据**:
-    -   下载链接: [raw_data.rar (Google Drive)](https://drive.google.com/file/d/1nq5UZIhkrMUsS_N4oVKs5l3fM82JsFZl/view?usp=drive_link)
-    -   下载后解压，并将所有内容放入项目根目录下的 `raw_data/` 文件夹中。确保其中包含PDB文件所在的 `STRING_AF2DB` 子文件夹。
+-   **Download raw data**:
+    -   Download link: [raw_data.rar (Google Drive)](https://drive.google.com/file/d/1nq5UZIhkrMUsS_N4oVKs5l3fM82JsFZl/view?usp=drive_link)
+    -   After downloading, extract and place all contents in the raw_data/ folder under the project root directory. Ensure it contains the STRING_AF2DB subfolder with PDB files.
 
--   **生成ESM-2嵌入**:
-    -   运行 `src/generate_esm_embeddings.py` 为您的数据集生成初始特征。
-    -   **注意**: 运行前请务必修改脚本内的 `dataset` 和 `local_model_path` 变量。
+-   **Generate ESM-2 embeddings**:
+    -  Run src/generate_esm_embeddings.py to generate initial features for your dataset.
+    -  **Note**: Please make sure to modify the dataset and local_model_path variables in the script before running.
     ```bash
     cd src
     python generate_esm_embeddings.py
     ```
 
--   **处理图结构数据**:
-    -   运行 `src/data_process.py` 来处理PDB文件，并生成图的边文件。
+-   **Process graph structure data**:
+    -   Run src/data_process.py to process PDB files and generate graph edge files.
     ```bash
-    # 仍在 src 目录下
+    # Still in the src directory
     python data_process.py --dataset <dataset_name：SHS27k,SHS148k,STRING>
     ```
 
-### 3. 运行训练
+### 3. Run Training
 
--   **预训练 + 下游任务**:
-    -   要完整地运行整个训练流程（先进行VAE预训练，然后进行下游GIN模型训练），请执行：
+-   **Pretraining + Downstream task**:
+    -   To run the complete training pipeline (VAE pretraining followed by downstream GIN model training), execute:
     ```bash
-    # 仍在 src 目录下
+    # Still in the src directory
     python train.py --dataset SHS148k --split_mode bfs --seed 42
     ```
-    -   训练完成后，最优的VAE模型 vae_model.ckpt 和 GIN模型model_..._best_state.pth将保存在 results/ 目录下。
+    -  After training completion, the optimal VAE model vae_model.ckpt and GIN model model_..._best_state.pth will be saved in the results/ directory.
 
--   **断点续训**:
-    -   如果训练意外中断，您可以使用 `--resume` 参数从检查点恢复。
+-   **Resume training**:
+    -   If training is interrupted unexpectedly, you can use the --resume parameter to resume from checkpoints.
     ```bash
-    # 示例：恢复GIN下游任务训练
+    # Example: Resume GIN downstream task training
     python train.py --dataset STRING --split_mode random --resume ../results/STRING/.../gin_cl_aux_randmcm_checkpoint.pth
     ```
 
-## 引用
+## Citation
 
-如果我们的工作对您的研究有所帮助，请考虑引用我们的论文：
+If our work is helpful to your research, please consider citing our paper:
 
 ```bibtex
 @article{yang2024microenvppi,
@@ -155,9 +155,9 @@ python train.py --dataset SHS27k --split_mode dfs --ckpt_path "../results/SHS27k
 }
 ```
 
-## 联系方式
+## Contact
 
-如果您有任何问题或建议，欢迎通过GitHub Issue与我们交流，或直接联系通讯作者：
+If you have any questions or suggestions, please feel free to communicate with us through GitHub Issues, or contact the corresponding authors directly:
 - **Linlin Zhuo**: 20210339@wzut.edu.cn
 - **Dongsheng Cao**: oriental-cds@163.com
 - **Xiangzheng Fu**: fxzheng@hkbu.edu.cn
