@@ -49,13 +49,13 @@ MicroEnvPPI/
 
 ## 快速开始：使用预训练模型进行评估
 
-我们提供了在 **SHS27k** 数据集上针对三种不同划分方式（`random`, `bfs`, `dfs`）训练好的模型。您可以按照以下步骤快速复现评估结果。
+我们提供了在 **SHS27k** 数据集上针对三种不同划分方式random, bfs,dfs训练好的模型。您可以按照以下步骤快速复现评估结果。
 
 #### 1. 准备环境和代码
 
 ```bash
 # 克隆本仓库
-git clone [https://github.com/YangKun021224/MicroEnvPPI.git](https://github.com/YangKun021224/MicroEnvPPI.git)
+git clone [https://github.com/yangkun021224/MicroEnvPPI.git](https://github.com/yangkun021224/MicroEnvPPI.git)
 cd MicroEnvPPI
 
 # 使用Conda创建并激活环境
